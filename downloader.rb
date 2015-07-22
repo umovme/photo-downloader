@@ -35,22 +35,29 @@ class PhotoDownloadGenerator
   def download_photo line
     columns = CSV.parse(line, :col_sep => ?;, headers: false)
     columns.each do |column|
+       
        photo_url = get_photo_by_index column
+       
        if is_photo photo_url
           puts "record with photo ... downloading photo #{photo_url}"
-          photo_name = extract_photo_name photo_url
-          customer_identifier = extract_customer_identifier column
-          customer_photo_folder = "#{PHOTO_PATH}/#{customer_identifier}"
-          FileUtils::mkdir_p customer_photo_folder
-          open(photo_url) { |f|
-              File.open("#{customer_photo_folder}/#{photo_name}.jpg","wb") do |file|
-                  file.puts f.read
-              end
-          }
+          build_photo photo_url, column
        else
          puts "record has no photo"
        end
+    
     end
+  end
+
+  def build_photo photo_url, column
+      photo_name = extract_photo_name photo_url
+      customer_identifier = extract_customer_identifier column
+      customer_photo_folder = "#{PHOTO_PATH}/#{customer_identifier}"
+      FileUtils::mkdir_p customer_photo_folder
+      open(photo_url) { |f|
+          File.open("#{customer_photo_folder}/#{photo_name}.jpg","wb") do |file|
+              file.puts f.read
+          end
+      }
   end
 
   def extract_photo_name photo_url
