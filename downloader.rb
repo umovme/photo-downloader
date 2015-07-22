@@ -66,16 +66,16 @@ class PhotoDownloadGenerator
       photo_url[initial_index + 4 .. final_index - 1 ]
   end
 
-  def extract_customer_identifier row
-      row[3]
-  end
-
   def is_first_line counter
     counter == 1 
   end
 
   def is_photo photo_url
     photo_url.include? "http://picviewer" 
+  end
+
+  def extract_customer_identifier row
+      row[3]
   end
 
   def get_photo_by_index row
