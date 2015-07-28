@@ -4,8 +4,8 @@ require 'fileutils'
 
 class PhotoDownload
 
-  PHOTO_PATH = "/tmp/photos"
-  CSV_FILES_FOLDER = "/tmp/*.csv"
+  PHOTO_PATH = "photos"
+  CSV_FILES_FOLDER = "files_to_process/*.csv"
 
   def run
     files = Dir[CSV_FILES_FOLDER]
@@ -66,8 +66,8 @@ class PhotoDownload
   def build_photo photo_url, column
       photo_name = extract_photo_name photo_url
       customer_identifier = extract_customer_identifier column
-      current_date = Time.new.strftime("%Y-%m-%d")
-      customer_photo_folder = "#{PHOTO_PATH}/#{customer_identifier}/#{current_date}"
+      execution_date = extract_execution_date column
+      customer_photo_folder = "#{PHOTO_PATH}/#{customer_identifier}/#{execution_date}"
       FileUtils::mkdir_p customer_photo_folder
       open(photo_url) { |f|
           File.open("#{customer_photo_folder}/#{photo_name}.jpg","wb") do |file|
@@ -96,6 +96,10 @@ class PhotoDownload
 
   def extract_customer_identifier row
       row[3]
+  end
+
+  def extract_execution_date row
+    row[0]
   end
 
   def get_photo_by_index row
