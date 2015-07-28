@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    csv_hasher (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  csv_hasher
