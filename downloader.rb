@@ -1,14 +1,30 @@
 require 'csv_hasher'
 require 'open-uri'
 require 'fileutils'
+require 'yaml'
 
 class PhotoDownload
 
-  PHOTO_PATH = "photos"
-  CSV_FILES_FOLDER = "files_to_process/*.csv"
+  def photo_path
+    @@settings['photo_path']
+  end
+
+  def files_folder
+    @@settings['files_folder']
+  end
+
+  def files_extension
+    @@settings['files_extension']
+  end
+
+  def load_settings
+    @@settings=YAML.load_file(File.join(File.dirname(__FILE__), 'conf/environment.yml'))
+  end
 
   def run
-    files = Dir[CSV_FILES_FOLDER]
+    load_settings
+    file = files_folder + '/' + files_extension
+    files = Dir[file]
     files.each do |filename|
       file = File.new(filename, "r")
       puts "Starting processing file #{File.absolute_path(file)}"
@@ -67,7 +83,7 @@ class PhotoDownload
       photo_name = extract_photo_name photo_url
       customer_identifier = extract_customer_identifier column
       execution_date = extract_execution_date column
-      customer_photo_folder = "#{PHOTO_PATH}/#{customer_identifier}/#{execution_date}"
+      customer_photo_folder = "#{photo_path}/#{customer_identifier}/#{execution_date}"
       FileUtils::mkdir_p customer_photo_folder
       open(photo_url) { |f|
           File.open("#{customer_photo_folder}/#{photo_name}.jpg","wb") do |file|

@@ -1,0 +1,3 @@
+photo_path: photos
+files_folder: files_to_process
+files_extension: '*.csv'
