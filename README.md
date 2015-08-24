@@ -25,6 +25,9 @@ index_execution_date_folder: 0
 index_photo_url: 43
 ```
 * Run the run.rb file to process the CSV files
+```
+ruby run.rb
+```
 
 Result
 -------------
