@@ -33,7 +33,8 @@ Result
 -------------
 * The photos is going to be saved into ./photos folder
 ```
-./ <customer_identification_folder>
-                                    /<execution_date_folder>
-                                                            /photo_id.jpg
+./photos
+    /<customer_identification_folder>
+          /<execution_date_folder>
+                /photo_id.jpg
 ```
