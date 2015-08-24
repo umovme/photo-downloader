@@ -1,9 +1,16 @@
+# encoding: UTF-8
 require 'csv_hasher'
 require 'open-uri'
 require 'fileutils'
 require 'yaml'
+require 'logging'
 
-class PhotoDownload
+class PhotoDownloader
+
+  def initialize
+    @logger = Logging.logger('log/photo_downloader.log')
+    @logger.level = :info
+  end
 
   def photo_path
     @@settings['photo_path']
@@ -22,15 +29,34 @@ class PhotoDownload
   end
 
   def run
+    log_start_process
     load_settings
+    load_files.each do |filename|
+      process_file filename
+    end
+    log_finish_process
+  end
+
+  def process_file filename
+    file = File.new(filename, "r")
+    @logger.info "  Starting processing file #{File.absolute_path(file)}"
+    load file
+    file.close
+  end
+
+  def load_files
     file = files_folder + '/' + files_extension
     files = Dir[file]
-    files.each do |filename|
-      file = File.new(filename, "r")
-      puts "Starting processing file #{File.absolute_path(file)}"
-      load file
-      file.close
-    end
+  end
+
+  def log_finish_process
+    @logger.info "Downloads finished successfully!!"
+    @logger.info "=========================================="
+  end
+
+  def log_start_process
+    @logger.info "=========================================="
+    @logger.info "Starting downloading photos process ... "
   end
 
   def load file
@@ -42,24 +68,23 @@ class PhotoDownload
         end
         rename_file_to_processed file
     rescue => err
-        puts "Exception: #{err}"
+        @logger.info "Exception: #{err}"
         err
     end
   end
 
   def process_data line, counter
     if( is_first_line counter )
-        puts "Ignoring header ..."
+        @logger.info "Ignoring header ..."
         return ''
     end
 
     if( is_last_line line)
-        puts "Last line ... download of photo finished successfully!!!"
+        @logger.info "Last line ... download of photo finished successfully!!!"
         return ''
     end
     
     download_photo line
-    
   end
 
   def download_photo line
@@ -69,12 +94,12 @@ class PhotoDownload
          photo_url = get_photo_by_index column
          
          if is_photo photo_url
-            puts "Found record with photo #{photo_url}"
+            @logger.info "Found record with photo #{photo_url}"
             build_photo photo_url, column
          end
 
       rescue => err
-          puts "Error while downloading photo: #{err}"
+          @logger.info "Error while downloading photo: #{err}"
       end
     end
   end
@@ -111,25 +136,25 @@ class PhotoDownload
   end
 
   def extract_customer_identifier row
-      row[3]
+      index_customer_folder = @@settings['index_customer_folder']
+      row[index_customer_folder]
   end
 
   def extract_execution_date row
-    row[0]
+    index_execution_date_folder = @@settings['index_execution_date_folder']
+    row[index_execution_date_folder]
   end
 
   def get_photo_by_index row
-    row[43]
+    index_photo_url = @@settings['index_photo_url']
+    row[index_photo_url]
   end
 
   def rename_file_to_processed file
     original_filename = File.absolute_path(file)
     filename_processed = "#{File.absolute_path(file)}.processado"
-    puts "Renomeando arquivo ...#{original_filename} para #{filename_processed}"
+    @logger.info "Renomeando arquivo ...#{original_filename} para #{filename_processed}"
     File.rename(original_filename, filename_processed)
   end
 
 end
-
-photo_generator = PhotoDownload.new
-photo_generator.run
