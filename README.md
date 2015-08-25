@@ -1,40 +1,54 @@
 # photo-downloader
 
-Setup
+setup
 -------------
-* Clone the repository ...
+* Clonar o repositório abaixo ...
 ```
 git clone https://github.com/umovme/photo-downloader.git
 ```
-* Access de repo folder
+* Acesse a pasta do repositório
 ```
 cd photo-downloader
 ```
-* Run the setup.rb file
+* Execute o arquivo setup.rb para configurar o aplicativo
 ```
 ruby setup.rb
 ```
 
-Configure
+configure
 -------------
-* Put CSV files into folder files_to_process
-* Open file conf/environment.yml and configure the index variables
+* Coloque os arquivos CSV dentro da pasta ./files_to_process
+* Abra o arquivo conf/environment.yml e configure as variaveis para execução do aplicativo conforme é mostrado abaixo
+
 ```
-index_customer_folder: 3
-index_execution_date_folder: 0
-index_photo_url: 43
+index_first_level_photo_folder: 3
+``
+Indice no arquivo CSV que representará o nome da pasta de primeiro nível( ex.: cnpj/nome do cliente)
+
 ```
-* Run the run.rb file to process the CSV files
+index_sencond_level_photo_folder: 0
+```
+Indice no arquivo CSV que representará o nome da pasta de segundo nível(ex.: data de execução ... 2015-01-01)
+
+```
+indexes_photo_url:
+    - 33
+    - 35
+    - 43
+```
+Lista de índices no arquivo CSV que indica quais colunas podem conter URLs para download de photo
+
+* Rode o arquivo run.rb para processar os arquivos CSVs
 ```
 ruby run.rb
 ```
 
-Result
+result
 -------------
-* The photos is going to be saved into ./photos folder
+* As fotos serão salvas na pasta ./photos
 ```
 ./photos
-    /<customer_identification_folder>
-          /<execution_date_folder>
-                /photo_id.jpg
+    /index_first_level_photo_folder
+          /index_sencond_level_photo_folder
+                /indexes_photo_url.jpg
 ```
