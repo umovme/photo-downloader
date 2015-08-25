@@ -114,8 +114,8 @@ class PhotoDownloader
 
   def build_photo photo_url, column
       photo_name = extract_photo_name photo_url
-      customer_identifier = extract_customer_identifier column
-      execution_date = extract_execution_date column
+      customer_identifier = first_level_photo_folder column
+      execution_date = sencond_level_photo_folder column
       customer_photo_folder = "#{photo_path}/#{customer_identifier}/#{execution_date}"
       FileUtils::mkdir_p customer_photo_folder
       open(photo_url) { |f|
@@ -147,18 +147,18 @@ class PhotoDownloader
     photo_url.include? "http://picviewer" 
   end
 
-  def extract_customer_identifier row
-      index_customer_folder = @@settings['index_customer_folder']
-      row[index_customer_folder]
+  def first_level_photo_folder row
+      index_first_level_photo_folder = @@settings['index_first_level_photo_folder']
+      row[index_first_level_photo_folder]
   end
 
-  def extract_execution_date row
-    index_execution_date_folder = @@settings['index_execution_date_folder']
-    row[index_execution_date_folder]
+  def sencond_level_photo_folder row
+    index_sencond_level_photo_folder = @@settings['index_sencond_level_photo_folder']
+    row[index_sencond_level_photo_folder]
   end
 
   def get_photos_position
-    @@settings['index_photo_url']
+    @@settings['indexes_photo_url']
   end
 
   def rename_file_to_processed file
