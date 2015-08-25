@@ -74,34 +74,42 @@ class PhotoDownloader
   end
 
   def process_data line, counter
-    if( is_first_line counter )
+    if( is_first_line counter or is_second_line counter )
         @logger.info "Ignoring header ..."
-        return ''
+        return
     end
 
     if( is_last_line line)
-        @logger.info "Last line ... download of photo finished successfully!!!"
-        return ''
+        @logger.info "Last line ... download of photo finished successfully!!!\n"
+        return
     end
-    
-    download_photo line
+    @logger.info "Processing line #{counter}"
+    download_photos line
   end
 
-  def download_photo line
-    columns = CSV.parse(line, :col_sep => ?;, headers: false)
-    columns.each do |column|
-      begin 
-         photo_url = get_photo_by_index column
-         
-         if is_photo photo_url
+  def download_photos file_line
+    csv = CSV.parse(file_line, :col_sep => ?;, headers: false)
+    csv.each do |line|
+      get_photos_position.each do |photo_position|
+        @logger.info "Looking for photo in column #{photo_position}"
+        download_photo line, photo_position
+      end
+    end
+  end
+
+  def download_photo line, photo_position
+    begin
+         photo_url=line[photo_position]
+         if (photo_url and is_photo photo_url)
             @logger.info "Found record with photo #{photo_url}"
-            build_photo photo_url, column
+            build_photo photo_url, line
+         else
+            @logger.info "No photo found"
          end
 
       rescue => err
           @logger.info "Error while downloading photo: #{err}"
       end
-    end
   end
 
   def build_photo photo_url, column
@@ -127,6 +135,10 @@ class PhotoDownloader
     counter == 1 
   end
 
+  def is_second_line counter
+    counter == 2
+  end
+
   def is_last_line line
     line.include? "FIM;"
   end
@@ -145,9 +157,8 @@ class PhotoDownloader
     row[index_execution_date_folder]
   end
 
-  def get_photo_by_index row
-    index_photo_url = @@settings['index_photo_url']
-    row[index_photo_url]
+  def get_photos_position
+    @@settings['index_photo_url']
   end
 
   def rename_file_to_processed file

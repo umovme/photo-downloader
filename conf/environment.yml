@@ -3,4 +3,7 @@ files_folder: files_to_process
 files_extension: '*.csv'
 index_customer_folder: 3
 index_execution_date_folder: 0
-index_photo_url: 43
+index_photo_url:
+    - 33
+    - 35
+    - 43
