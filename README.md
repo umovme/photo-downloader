@@ -26,7 +26,7 @@ index_first_level_photo_folder: 3
 Indice no arquivo CSV que representará o nome da pasta de primeiro nível( ex.: cnpj/nome do cliente)
 
 ```
-index_sencond_level_photo_folder: 0
+index_second_level_photo_folder: 0
 ```
 Indice no arquivo CSV que representará o nome da pasta de segundo nível(ex.: data de execução ... 2015-01-01)
 
@@ -49,6 +49,6 @@ result
 ```
 ./photos
     /index_first_level_photo_folder
-          /index_sencond_level_photo_folder
+          /index_second_level_photo_folder
                 /indexes_photo_url.jpg
 ```

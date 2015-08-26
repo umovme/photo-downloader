@@ -115,7 +115,7 @@ class PhotoDownloader
   def build_photo photo_url, column
       photo_name = extract_photo_name photo_url
       customer_identifier = first_level_photo_folder column
-      execution_date = sencond_level_photo_folder column
+      execution_date = second_level_photo_folder column
       customer_photo_folder = "#{photo_path}/#{customer_identifier}/#{execution_date}"
       FileUtils::mkdir_p customer_photo_folder
       open(photo_url) { |f|
@@ -152,9 +152,9 @@ class PhotoDownloader
       row[index_first_level_photo_folder]
   end
 
-  def sencond_level_photo_folder row
-    index_sencond_level_photo_folder = @@settings['index_sencond_level_photo_folder']
-    row[index_sencond_level_photo_folder]
+  def second_level_photo_folder row
+    index_second_level_photo_folder = @@settings['index_second_level_photo_folder']
+    row[index_second_level_photo_folder]
   end
 
   def get_photos_position
