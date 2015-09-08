@@ -140,7 +140,8 @@ class PhotoDownloader
   end
 
   def is_last_line line
-    line.include? "FIM;"
+    count_column=line.split(";").length
+    count_column < 2 and line.include? "FIM;"
   end
 
   def is_photo photo_url

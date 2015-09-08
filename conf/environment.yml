@@ -2,7 +2,7 @@ photo_path: photos
 files_folder: files_to_process
 files_extension: '*.csv'
 index_first_level_photo_folder: 3
-index_sencond_level_photo_folder: 0
+index_second_level_photo_folder: 0
 indexes_photo_url:
     - 33
     - 35
