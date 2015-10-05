@@ -2,7 +2,7 @@
  
 Setup
 -------------
-* Clonar o repositório abaixo ...
+* Clone o repositório abaixo ...
 ```
 git clone https://github.com/umovme/photo-downloader.git
 ```
@@ -39,7 +39,6 @@ indexes_photo_url:
 Lista de índices no arquivo CSV que indica quais colunas podem conter URLs para download de photo
  
 * Rode o arquivo run.rb para processar os arquivos CSVs
-* Run the run.br file to process the CSV files
 ```
 ruby run.rb
 ```
